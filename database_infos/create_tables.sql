@@ -19,7 +19,6 @@ CREATE TABLE public.estados (
   id SERIAL PRIMARY KEY,
   nome VARCHAR(100) NOT NULL,
   sigla CHAR(2) NOT NULL UNIQUE,
-  vpb VARCHAR(20),
   clima VARCHAR(255)
 );
 
