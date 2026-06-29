@@ -1,16 +1,5 @@
-// Variável de estado para controle
-let estado = {
-  produtos: [],
-  complementos: [],
-
-  produtoSelecionado: null,
-  complementosSelecionados: [],
-  precoTotal: 0,
-
-  carrinho: [],
-};
-
 const modal = document.querySelector(".modal");
+const cardsContainer = document.querySelector(".cards");
 
 // Quando a tela é carregada:
 // - Busca e salva as informações dos produtos e dos complementos
@@ -35,7 +24,7 @@ async function buscarInformacoesDaAPI() {
 // Renderiza um card novo para cada produto
 function renderizarCardProdutos() {
   estado.produtos.forEach((produto) => {
-    document.querySelector(".cards").append(criarCard(produto));
+    cardsContainer.append(criarCard(produto));
   });
 }
 
@@ -72,7 +61,7 @@ function criarCard(produto) {
   footer.classList.add("produto-footer");
 
   const button = document.createElement("button");
-  button.classList.add("btn-adicionar");
+  button.classList.add("primary-button");
   button.addEventListener("click", () => adicionar(produto));
   button.innerText = "Adicionar";
 
@@ -86,7 +75,7 @@ function criarCard(produto) {
 }
 
 function abrirModal() {
-  preencherModal()
+  preencherModal();
   modal.showModal();
 }
 
@@ -94,8 +83,8 @@ function fecharModal() {
   modal.close();
   estado.produtoSelecionado = null;
   estado.complementosSelecionados = [];
-  estado.precoTotal = 0
-  document.querySelector(".complementos").innerHTML = ""
+  estado.precoTotal = 0;
+  document.querySelector(".complementos").innerHTML = "";
 }
 
 // Quando um elemento for adicionado:
@@ -106,7 +95,7 @@ function fecharModal() {
 // - - Adiciona ao carrinho
 function adicionar(produto) {
   estado.produtoSelecionado = produto;
-  estado.precoTotal = calcularPrecoTotalItem()
+  estado.precoTotal = calcularPrecoTotalItem();
 
   if (produto.pode_complementos === true) {
     abrirModal();
@@ -119,29 +108,20 @@ function adicionar(produto) {
 function preencherModal() {
   document.querySelector(".modal-produto-imagem").src =
     `/images/produtos/${estado.produtoSelecionado.imagem}`;
-  document.querySelector(".modal-produto-nome").innerText = estado.produtoSelecionado.nome
-  document.querySelector(".modal-produto-descricao").innerText = estado.produtoSelecionado.descricao
-  atualizarDisplayPreco()
+  document.querySelector(".modal-produto-nome").innerText =
+    estado.produtoSelecionado.nome;
+  document.querySelector(".modal-produto-descricao").innerText =
+    estado.produtoSelecionado.descricao;
+  atualizarDisplayPreco();
 
-  const div_complementos = document.querySelector(".complementos")
+  const div_complementos = document.querySelector(".complementos");
   estado.complementos.forEach((complemento) => {
     const label = document.createElement("label");
     label.classList.add("complemento");
 
     const inputCheck = document.createElement("input");
     inputCheck.type = "checkbox";
-    inputCheck.addEventListener('change', (event) => {
-      if (event.target.checked === true) {
-        estado.complementosSelecionados.push(complemento)
-        estado.precoTotal = calcularPrecoTotalItem()
-        atualizarDisplayPreco()
-      } else {
-        estado.complementosSelecionados = estado.complementosSelecionados.filter(item => item.id_complemento != complemento.id_complemento)
-        estado.precoTotal = calcularPrecoTotalItem()
-        atualizarDisplayPreco()
-      }
-    })
-    inputCheck.id = complemento.id_complemento
+    inputCheck.dataset.complementoId = complemento.id_complemento;
 
     const spanNome = document.createElement("span");
     spanNome.innerText = `${complemento.nome}`;
@@ -151,7 +131,7 @@ function preencherModal() {
 
     label.append(inputCheck, spanNome, spanPreco);
 
-    div_complementos.append(label)
+    div_complementos.append(label);
   });
 }
 
@@ -160,15 +140,15 @@ function confirmarAdd() {
   const item = {
     produto: estado.produtoSelecionado,
     complementos: estado.complementosSelecionados,
-    precoTotalItem: estado.precoTotal
+    precoTotalItem: estado.precoTotal,
   };
   estado.carrinho.push(item);
+  salvarCarrinho();
   estado.produtoSelecionado = null;
   estado.complementosSelecionados = [];
   fecharModal();
-  mostrarAviso()
-
-  console.log(estado.carrinho)
+  mostrarAviso();
+  console.log(estado.carrinho);
 }
 
 function atualizarDisplayPreco() {
@@ -176,22 +156,38 @@ function atualizarDisplayPreco() {
     `R$${estado.precoTotal}`;
 }
 
-function mostrarAviso() {
-  const aviso = document.querySelector(".aviso-caixa")
-  aviso.style.display = "block";
-  setTimeout(() => {
-    aviso.style.display = "none";
-  }, 2000);
-}
-
 function calcularPrecoTotalItem() {
-  let precoTotal = 0
+  let precoTotal = 0;
 
-  precoTotal += parseFloat(estado.produtoSelecionado.preco)
+  precoTotal += parseFloat(estado.produtoSelecionado.preco);
+
+  console.log(estado.complementosSelecionados);
 
   estado.complementosSelecionados.forEach((complemento) => {
-    precoTotal += parseFloat(complemento.preco)
-  })
+    precoTotal += parseFloat(complemento.preco);
+  });
 
-  return precoTotal.toFixed(2)
+  return precoTotal.toFixed(2);
+}
+
+document.querySelector(".complementos").addEventListener("change", (e) => {
+  if (e.target.matches("input[type='checkbox']")) {
+    const complemento = estado.complementos.find(
+      (c) => c.id_complemento === Number(e.target.dataset.complementoId),
+    );
+    if (e.target.checked === true) {
+      estado.complementosSelecionados.push(complemento);
+      atualizarPreco()
+    } else {
+      estado.complementosSelecionados = estado.complementosSelecionados.filter(
+        (item) => item.id_complemento != complemento.id_complemento,
+      );
+      atualizarPreco()
+    }
+  }
+});
+
+function atualizarPreco() {
+  estado.precoTotal = calcularPrecoTotalItem();
+  atualizarDisplayPreco();
 }

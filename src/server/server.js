@@ -37,6 +37,10 @@ app.get("/vendedor", (req, res) => {
   res.sendFile(path.join(__dirname, "..", "views/admin/index_admin.html"));
 });
 
+app.get("/cliente/carrinho", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "views/cliente/carrinho.html"));
+});
+
 app.get("/infos/produtos", async(req, res) => {
   const result = await pool.query("SELECT * FROM public.produtos;")
   const dados = await result.rows

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,6 +7,8 @@
     <link rel="shortcut icon" href="images/icon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="/css/index.css" />
     <link rel="stylesheet" href="/css/cliente.css" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   </head>
   <body>
     <header class="cabecalho">
@@ -14,7 +16,11 @@
         <img src="/images/icon.png" />
         <h1>Sorbaçaí</h1>
       </section>
-      <h2>Faça seu pedido</h2>
+      <section>
+        <h2>Faça seu pedido</h2>
+        <a href="/cliente/carrinho" class="botao-menu"><i class="fa-solid fa-cart-shopping"></i></a>
+      </section>
+      
     </header>
 
     <main>
@@ -44,9 +50,9 @@
             <div class="complementos"></div>
 
             <div class="botoes">
-              <button class="cancelar" onclick="fecharModal()">Cancelar</button>
+              <button class="secondary-button" onclick="fecharModal()">Cancelar</button>
 
-              <button class="confirmar" onclick="confirmarAdd()">
+              <button class="primary-button" onclick="confirmarAdd()">
                 Adicionar ao carrinho
               </button>
             </div>
@@ -58,8 +64,11 @@
         <p>ADICIONADO!</p>
       </div>
 
+
     </main>
 
+    <script src="/js/main.js"></script>
+    <script src="/js/estado.js"></script>
     <script src="/js/cliente.js"></script>
   </body>
 </html>
