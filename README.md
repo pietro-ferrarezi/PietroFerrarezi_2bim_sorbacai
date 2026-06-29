@@ -40,7 +40,7 @@ cd PietroFerrarezi_2bim_sorbacai
 # 3. Instale as dependências
 npm install
 
-# 4. Utilizando o PgAdmin ou qualquer outro cliente do PostgreSQL, execute os arquivos __create_tables.sql__ e __insert_values.sql__
+# 4. Utilizando o PgAdmin ou qualquer outro cliente do PostgreSQL, execute os arquivos create_tables.sql e insert_values.sql
 
 # 4. Configure as variáveis de ambiente
 cp .env.example .env
