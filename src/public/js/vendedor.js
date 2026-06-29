@@ -66,13 +66,16 @@ function criarCardPedido(pedido) {
 
   card_itens.append(ul1);
 
+  const preco = document.createElement("p")
+  preco.innerText = `TOTAL: R$${pedido.preco_total.toFixed(2).replace(".", ",")}`
+
   const button = document.createElement("button")
   button.classList.add("primary-button")
   button.dataset.pedidoId = pedido.id_pedido
   button.innerText = "Concluido"
 
 
-  card.append(card_infos, hr1, card_itens, hr2, button)
+  card.append(card_infos, hr1, card_itens, hr2, preco, button)
 
   return card
 }

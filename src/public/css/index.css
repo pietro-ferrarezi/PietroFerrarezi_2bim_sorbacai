@@ -126,7 +126,7 @@ main {
   max-height: 23vh;
 }
 
-.cabecalho section {
+.cabecalho section, .cabecalho nav {
   display: flex;
   align-items: center;
   gap: 10px;
